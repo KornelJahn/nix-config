@@ -16,5 +16,3 @@ sudo cp -ar /tmp/persist /mnt/
 sudo nixos-install --flake "$flakedir#$host" --no-root-passwd
 
 sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
-sudo umount /mnt/boot*
-sudo zpool export -a
