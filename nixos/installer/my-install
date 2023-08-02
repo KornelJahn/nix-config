@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Dependencies: zfs
+
+set -euo pipefail
+
+host="${INST_TARGET_HOST:?}"
+flakedir="${INST_FLAKE_DIR:?}"
+
+set -x
+
+sudo mkdir -p /mnt/persist/etc/ssh
+sudo cp -a /etc/machine-id /mnt/persist/etc/
+# Copy user password files previously created into /tmp/persist
+sudo cp -ar /tmp/persist /mnt/
+
+sudo nixos-install --flake "$flakedir#$host" --no-root-passwd
+
+sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
+sudo umount /mnt/boot*
+sudo zpool export -a

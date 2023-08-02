@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Dependencies:
+# swaymsg jq
+
+set -euo pipefail
+
+filter='  recurse(.nodes[], .floating_nodes[])'
+filter+=' | select(.nodes == [] and .floating_nodes == [])'
+filter+=' | "\(.app_id) \"\(.name)\""'
+
+swaymsg -t get_tree | jq -r "$filter"
+
+# vim: ft=bash:ts=2:sw=2:et

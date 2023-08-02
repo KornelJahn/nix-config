@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Dependencies: jq mkpasswd
+
+set -euo pipefail
+
+host="${INST_TARGET_HOST:?}"
+flakedir="${INST_FLAKE_DIR:?}"
+diskocfg="$flakedir/nixos/configs/$host-disko.nix"
+
+mkpass() {
+  local output="$1"
+  local encoder="$2"
+  local message="password ($output)"
+  local password=''
+  local verification=x
+
+  while [[ $password != "$verification" ]]; do
+    echo >&2
+    IFS= read -rsp "Enter $message: " password
+    echo >&2
+    IFS= read -rsp "Repeat $message: " verification
+    echo >&2
+  done
+
+  printf %s "$password" | $encoder | sudo bash -c "umask 0377; cat > $output"
+}
+
+# Extract temporary paths for zpool passphrase files
+zpoolkeyfiles=$(
+  nix eval --json -f "$diskocfg" |
+  jq --raw-output '
+    [
+      .disko.devices.zpool
+      | ..
+      | select(
+          .keyformat?
+          and (.keyformat == "passphrase")
+          and (.keylocation | startswith("file://"))
+        )
+      | .keylocation
+      | sub("^file://"; "")
+    ]
+    | join(" ")
+  '
+)
+
+# Construct temporary paths for user password files
+passwordfiles=$(
+  nix eval --json "$flakedir#nixosConfigurations.$host.config.users.users" |
+  jq --raw-output '
+    [
+      .[].passwordFile
+      | select(. != null)
+    ]
+    | map("/tmp" + .)
+    | join(" ")
+  '
+)
+
+for path in $zpoolkeyfiles; do
+  mkdir -p "$(dirname "$path")"
+  mkpass "$path" cat
+done
+
+for path in $passwordfiles; do
+  mkdir -p "$(dirname "$path")"
+  mkpass "$path" 'mkpasswd -s'
+done

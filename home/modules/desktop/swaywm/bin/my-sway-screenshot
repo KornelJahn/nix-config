@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Dependencies:
+# grim jq sway-contrib.grimshot
+
+set -euo pipefail
+
+scriptname=$(basename "$0")
+usage="Usage: $scriptname [ screen | focused | copy-area ]"
+
+_fail() {
+  printf '%s: %s\n' "$scriptname" "${1:-unknown error}" >&2
+  exit 1
+}
+
+_get_focused_win_capture_region() {
+  local filter
+  filter='  ..'
+  filter+=' | select(.focused?)'
+  filter+=' | .rect'
+  filter+=' | "\(.x),\(.y) \(.width)x\(.height)"'
+  swaymsg -t get_tree | jq -r "$filter"
+}
+
+case ${1:-screen} in
+  -h|--help)
+    echo "$usage"
+    exit 0
+    ;;
+  screen)
+    grim
+    ;;
+  focused)
+    grim -g "$(_get_focused_win_capture_region)"
+    ;;
+  copy-area)
+    grimshot copy area
+    ;;
+  *)
+    _fail "unknown mode: $1"
+    ;;
+esac
+
+# vim: ft=bash:ts=2:sw=2:et

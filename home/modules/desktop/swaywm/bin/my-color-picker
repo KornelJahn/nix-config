@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Dependencies:
+# grim slurp imagemagick
+
+set -euo pipefail
+
+# Source:
+# https://unix.stackexchange.com/a/523805
+grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:-
+
+# vim: ft=bash:ts=2:sw=2:et

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Dependencies:
+# pamixer
+
+set -euo pipefail
+
+scriptname=$(basename "$0")
+usage="Usage: $scriptname "
+usage+='{ get | raise | lower | toggle-mute | toggle-mute-mic }'
+
+_fail() {
+  printf '%s: %s\n' "$scriptname" "${1:-unknown error}" >&2
+  exit 1
+}
+
+sinks="$(pamixer --list-sinks | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')"
+sources="$(pamixer --list-sources | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')"
+
+case $1 in
+  -h|--help)
+    echo "$usage"
+    exit 0
+    ;;
+  get)
+    sleep 0.1
+    ;;
+  raise)
+    for sink in $sinks; do
+      pamixer --sink "$sink" -ui 5
+    done
+    ;;
+  lower)
+    for sink in $sinks; do
+      pamixer --sink "$sink" -ud 5
+    done
+    ;;
+  toggle-mute)
+    for sink in $sinks; do
+      pamixer --sink "$sink" --toggle-mute
+    done
+    is_mute="$(pamixer --get-mute)"
+    [[ $is_mute == true ]] && echo 0 && exit 0
+    ;;
+  toggle-mute-mic)
+    for src in $sources; do
+      pamixer --source "$src" --toggle-mute
+    done
+    # No output in this case
+    exit 0
+    ;;
+  *)
+    _fail "unknown command: $1"
+    ;;
+esac
+
+# Output state of the default sink only for the OSD
+pamixer --get-volume
+
+# vim: ft=bash:ts=2:sw=2:et

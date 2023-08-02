@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# Dependencies:
+# light
+
+set -euo pipefail
+
+scriptname=$(basename "$0")
+usage="Usage: $scriptname { get | raise | lower }"
+
+_fail() {
+  printf '%s: %s\n' "$scriptname" "${1:-unknown error}" >&2
+  exit 1
+}
+
+# Set brightness roughly logarithmically (quotient 1.52)
+levels=(0 1 2 4 7 11 17 27 42 65 100)
+[[ ${#levels[@]} -eq 11 ]]  # Assert that levels has 11 elements!
+
+_get_level() {
+  local value=$1
+  local i
+  for i in "${!levels[@]}"; do
+    [[ ${levels[i]} == "$value" ]] && break
+  done
+  echo "$i"
+}
+
+_next() {
+  local i
+  i="$(_get_level "$1")"
+  if [[ $i -ge 10 ]]; then
+    echo "${levels[i]}"
+  else
+    echo "${levels[((i+1))]}"
+  fi
+}
+
+_prev() {
+  local i
+  i="$(_get_level "$1")"
+  if [[ $i -le 0 ]]; then
+    echo "${levels[i]}"
+  else
+    echo "${levels[((i-1))]}"
+  fi
+}
+
+value="$(light -G)"
+# Round to the nearest integer
+value="$(echo "$value" | awk '{print int($1+0.5)}')"
+
+case $1 in
+  -h|--help)
+    echo "$usage"
+    exit 0
+    ;;
+  get)
+    sleep 0.1
+    ;;
+  raise)
+    light -S "$(_next "$value")"
+    ;;
+  lower)
+    light -S "$(_prev "$value")"
+    ;;
+  *)
+    printf '%s\n' "Usage: $(basename "$0") "
+    exit 1
+    ;;
+esac
+
+# Output current value for the OSD
+light -G | cut -d'.' -f1
+
+# vim: ft=bash:ts=2:sw=2:et

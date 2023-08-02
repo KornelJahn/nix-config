@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Dependencies: disko
+
+set -euo pipefail
+
+scriptname=$(basename "$0")
+
+_usage="
+Usage: $scriptname [-hn] [-d <disks-list>] [-p <zpools-list>]
+
+Options:
+  -d <disks-list>   Nix expression; a list of names of disks to be formatted.
+  -h                Display a help screen and quit.
+  -n                Perform a dry run only with no changes made.
+  -p <zpools-list>  Nix experssion; a list of names of ZFS pools to be created.
+"
+
+usage() { echo "$_usage" >&2; exit "${1:?}"; }
+
+host="${INST_TARGET_HOST:?}"
+flakedir="${INST_FLAKE_DIR:?}"
+diskocfg="$flakedir/nixos/configs/$host-disko.nix"
+filter="$flakedir/nixos/installer/filter-disko-config.nix"
+
+args=(--arg wrappedDiskoFile "$diskocfg")
+
+while getopts ':hnd:p:' opt; do
+  case $opt in
+    d) args+=(--arg disks "$OPTARG");;
+    p) args+=(--arg zpools "$OPTARG");;
+    n) args+=(--dry-run);;
+    h) usage 0;;
+    *) usage 1;;
+  esac
+done
+shift $((OPTIND-1))
+
+set -x
+
+sudo disko --mode disko "${args[@]}" "$filter"

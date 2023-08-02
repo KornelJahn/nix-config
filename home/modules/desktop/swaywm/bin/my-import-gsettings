@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Dependencies:
+# glib
+
+# Adapted from:
+# https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
+
+set -euo pipefail
+
+scriptname=$(basename "$0")
+
+_fail() {
+  printf '%s: %s\n' "$scriptname" "${1:-unknown error}" >&2
+  exit 1
+}
+
+config="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+[[ -f $config ]] || _fail 'GTK3 settings.ini missing'
+
+_read_and_gset() {
+  local schema="org.gnome.desktop.interface"
+  local value
+  value="$(grep "$1" "$config" | cut -d'=' -f2)"
+  [[ -n $value ]] && gsettings set "$schema" "$2" "$value"
+}
+
+_read_and_gset gtk-theme-name gtk-theme
+_read_and_gset gtk-icon-theme-name icon-theme
+_read_and_gset gtk-cursor-theme-name cursor-theme
+_read_and_gset gtk-font-name font-name
+
+# vim: ft=bash:ts=2:sw=2:et
