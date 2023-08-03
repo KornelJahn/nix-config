@@ -13,10 +13,10 @@
       mkdir -p $XDG_CACHE_HOME/bash
     '';
     bashrcExtra = ''
-      export NIXOS_CONFIG_REPODIR="$HOME/Repos/nixos-config"
+      export CONFIG_REPODIR="$HOME/Repos/nix-config"
 
-      alias nr='sudo nixos-rebuild --flake "$NIXOS_CONFIG_REPODIR" '
-      alias hm='home-manager --flake "$NIXOS_CONFIG_REPODIR" '
+      alias nr='sudo nixos-rebuild --flake "$CONFIG_REPODIR" '
+      alias hm='home-manager --flake "$CONFIG_REPODIR" '
 
       if [[ "$TERM" != "linux" || -z "$DISPLAY" ]]; then
         # Aliases to apply settings (e.g. color schemes) only in terminal
