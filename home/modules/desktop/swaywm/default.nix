@@ -176,6 +176,7 @@ in
             { class = "Lxappearance"; }
             { app_id = "foot-floating"; }
           ];
+          titlebar = false;
         }; # floating
 
         input = {
@@ -287,6 +288,7 @@ in
         window = {
           border = 1;
           hideEdgeBorders = "smart";
+          titlebar = false;
         };
 
         workspaceAutoBackAndForth = true;
