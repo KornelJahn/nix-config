@@ -14,6 +14,7 @@ in
       "wheel"
       "audio"
       "video"
+      "input"
     ] ++ self.lib.filterExistingGroups config [
       "networkmanager"
       "scanner"
