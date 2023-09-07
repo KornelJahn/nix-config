@@ -5,7 +5,7 @@
 let
   inherit (config.my.desktop.theme) termFont;
   cfg = config.my.desktop.foot;
-  font = "${termFont.name} ${termFont.style}:size=${toString termFont.size}";
+  font = "${termFont.name}:size=${toString termFont.size}";
 in
 {
   options.my.desktop.foot.enable = lib.mkEnableOption "foot terminal emulator";

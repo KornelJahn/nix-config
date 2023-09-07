@@ -14,7 +14,7 @@ in
     ./mako.nix
     ./mpv.nix
     ./swaylock.nix
-    ./swaywm
+    ./swaywm.nix
   ];
 
   options.my.desktop = with lib; {

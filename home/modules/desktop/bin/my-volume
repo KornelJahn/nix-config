@@ -4,34 +4,22 @@
 
 set -euo pipefail
 
-scriptname=$(basename "$0")
-usage="Usage: $scriptname "
-usage+='{ get | raise | lower | toggle-mute | toggle-mute-mic }'
+step=10
+sinks=$(pamixer --list-sinks | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')
+sources=$(pamixer --list-sources | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')
 
-_fail() {
-  printf '%s: %s\n' "$scriptname" "${1:-unknown error}" >&2
-  exit 1
-}
-
-sinks="$(pamixer --list-sinks | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')"
-sources="$(pamixer --list-sources | awk 'BEGIN {ORS=" ";} NR>1 {print $1;}')"
-
-case $1 in
-  -h|--help)
-    echo "$usage"
-    exit 0
-    ;;
+case ${1:-} in
   get)
     sleep 0.1
     ;;
   raise)
     for sink in $sinks; do
-      pamixer --sink "$sink" -ui 5
+      pamixer --sink "$sink" -ui "$step"
     done
     ;;
   lower)
     for sink in $sinks; do
-      pamixer --sink "$sink" -ud 5
+      pamixer --sink "$sink" -ud "$step"
     done
     ;;
   toggle-mute)
@@ -49,7 +37,9 @@ case $1 in
     exit 0
     ;;
   *)
-    _fail "unknown command: $1"
+    echo -n "usage: $(basename "$0") " >&2
+    echo '{ get | raise | lower | toggle-mute | toggle-mute-mic }' >&2
+    exit 1
     ;;
 esac
 

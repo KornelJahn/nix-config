@@ -12,6 +12,8 @@ let
   inherit (pkgs) lib;
   svgName = builtins.head
     (lib.splitString "." (builtins.baseNameOf (toString svgTemplate)));
+  exports = builtins.concatStringsSep "\n"
+    (lib.mapAttrsToList (n: v: "export ${n}=${v}") colorscheme.colors);
 in
 pkgs.stdenvNoCC.mkDerivation {
   name = "${svgName}-wallpaper";
@@ -19,6 +21,7 @@ pkgs.stdenvNoCC.mkDerivation {
   dontUnpack = true;
   buildInputs = [ pkgs.inkscape pkgs.gettext ];
   buildPhase = ''
+    ${exports}
     envsubst < "$src" > wallpaper.svg
     inkscape \
       --export-type=png \
@@ -29,4 +32,4 @@ pkgs.stdenvNoCC.mkDerivation {
   installPhase = ''
     install -Dm0644 wallpaper.png $out
   '';
-} // (lib.optionalAttrs (colorscheme != { }) colorscheme.colors)
+}

@@ -11,13 +11,13 @@ in
   config = lib.mkIf cfg.enable {
     # WORKAROUND
     xdg.configFile."i3status-rust/config.toml".source =
-      config.lib.file.mkOutOfStoreSymlink
-        "${config.xdg.configHome}/i3status-rust/config-default.toml";
+     config.lib.file.mkOutOfStoreSymlink
+       "${config.xdg.configHome}/i3status-rust/config-default.toml";
 
     programs.i3status-rust = with config.colorscheme.colors; {
       enable = true;
       bars.default = {
-        icons = "awesome5";
+        icons = "material-nf";
         settings = {
           theme = {
             theme = "plain";
@@ -48,7 +48,7 @@ in
           }
           {
             block = "temperature";
-            format = " $icon $max C ";
+            format = " $icon $max{}C ";
             scale = "celsius";
             interval = 4;
             good = 20;
@@ -71,6 +71,13 @@ in
             format = " $icon $percentage {$time |}";
             missing_format = "";
             interval = 10;
+          }
+          {
+            block = "backlight";
+            missing_format = "";
+            minimum = 10;
+            step_width = 10;
+            root_scaling = 2.4065401804339555;
           }
           {
             block = "sound";

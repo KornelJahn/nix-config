@@ -13,17 +13,11 @@
     runtimeInputs = with pkgs; [ grim jq sway sway-contrib.grimshot ];
   };
 
-  volume = pkgs.writeShellApplication {
-    name = "my-volume";
-    text = builtins.readFile ./bin/my-volume;
-    runtimeInputs = with pkgs; [ pamixer ];
-  };
-
-  brightness = pkgs.writeShellApplication {
-    name = "my-brightness";
-    text = builtins.readFile ./bin/my-brightness;
-    runtimeInputs = with pkgs; [ light ];
-  };
+  # volume = pkgs.writeShellApplication {
+  #   name = "my-volume";
+  #   text = builtins.readFile ./bin/my-volume;
+  #   runtimeInputs = with pkgs; [ pamixer ];
+  # };
 
   colorPicker = pkgs.writeShellApplication {
     name = "my-color-picker";

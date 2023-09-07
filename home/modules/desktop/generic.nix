@@ -28,7 +28,7 @@ in
       remmina # remote desktop app
       waypipe # remote connection utility to Wayland desktop
       zathura # lightweight document viewer with vi-like keybindings
-    ];
+    ] ++ (builtins.attrValues (import ./utils.nix { inherit pkgs; }));
 
     home.sessionVariables = {
       # Wayland-specific session variables

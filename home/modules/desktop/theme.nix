@@ -45,17 +45,17 @@ in
     termFont = {
       name = lib.mkOption {
         type = lib.types.nonEmptyStr;
-        default = "Iosevka Term";
+        default = "Iosevka Term Nerd Font";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.iosevka-bin;
+        default = pkgs.nerdfonts;
       };
 
       style = lib.mkOption {
         type = lib.types.nonEmptyStr;
-        default = "Semibold";
+        default = "Regular";
       };
 
       size = lib.mkOption {
@@ -63,18 +63,6 @@ in
         default = if hRes >= 1920 then 16 else 12;
       };
     }; # termFont
-
-    iconFont = {
-      name = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        default = "Font Awesome 6 Free";
-      };
-
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.font-awesome;
-      };
-    }; # iconFont
 
     topBar = {
       fontSize = lib.mkOption {
@@ -112,7 +100,6 @@ in
         corefonts # MS TrueType core fonts
 
         cfg.termFont.package
-        cfg.iconFont.package
 
         # gsettings-desktop-schemas
 

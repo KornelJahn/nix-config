@@ -3,7 +3,6 @@
 let
   inherit (config.my.desktop.theme)
     cursorTheme
-    iconFont
     termFont
     topBar
     wallpaper
@@ -27,20 +26,21 @@ let
   swaymsg = "${pkgs.sway-unwrapped}/bin/swaymsg";
   locker = "${pkgs.swaylock}/bin/swaylock -f";
 
-  scripts = import ./scripts.nix { inherit lib pkgs; };
+  scripts = import ./swaywm/scripts.nix { inherit lib pkgs; };
+  utils = import ./utils.nix { inherit pkgs; };
 
-  execScript = script: op: "exec ${script} ${op}";
-  execScriptToWob = script: op: (execScript script op) + " > $SWAYSOCK.wob";
+  execCmd = cmd: op: "exec ${cmd} ${op}";
+  execCmdToWob = cmd: op: "exec ${cmd} ${op} > $SWAYSOCK.wob";
 
-  myScreenshot = execScript "${scripts.swayScreenshot}/bin/my-sway-screenshot";
-  myVolume = execScriptToWob "${scripts.volume}/bin/my-volume";
-  myBrightness = execScriptToWob "${scripts.brightness}/bin/my-brightness";
+  myScreenshot = execCmd "${scripts.swayScreenshot}/bin/my-sway-screenshot";
+  myVolume = execCmd "${utils.my-volume}/bin/my-volume";
+  myBrightness = execCmd "${utils.my-brightness}/bin/my-brightness";
 
   # Modifiers
   mod = "Mod4";
   altMod = "Mod1";
 
-  bindingModes = import ./sway-modes.nix { inherit config pkgs lib mod; };
+  bindingModes = import ./swaywm/modes.nix { inherit config pkgs lib mod; };
 
   # WORKAROUND:
   # https://github.com/nix-community/home-manager/issues/2659
@@ -64,12 +64,12 @@ in
         # https://github.com/swaywm/sway/issues/595
         export _JAVA_AWT_WM_NONREPARENTING=1
         export DESKTOP_SESSION=gnome
-        eval $(/run/wrappers/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh --daemonize 2>/dev/null)
+        # eval $(/run/wrappers/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh --daemonize 2>/dev/null)
         export SSH_AUTH_SOCK
       '' + homeSessionVariables;
       config = rec {
         fonts = {
-          names = [ termFont.name iconFont.name ];
+          names = [ termFont.name ];
           style = termFont.style;
           size = topBar.fontSize + 0.0; # Convert to float
         };
