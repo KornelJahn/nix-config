@@ -1,7 +1,7 @@
 {
   disko.devices = {
     disk = {
-      systemDisk = {
+      system = {
         type = "disk";
         device = "/dev/disk/by-id/nvme-eui.0026b768448ad5e5";
         content = {
@@ -16,7 +16,7 @@
                 mountpoint = "/boot";
               };
             };
-            vmPart = {
+            vm = {
               size = "128G";
               content = {
                 type = "filesystem";
@@ -24,7 +24,7 @@
                 mountpoint = "/var/lib/libvirt/images";
               };
             };
-            rootPart = {
+            root = {
               size = "100%";
               content = {
                 type = "zfs";
@@ -33,14 +33,14 @@
             };
           }; # partitions
         }; # content
-      }; # systemDisk
-      scratchDisk = {
+      }; # system
+      scratch = {
         type = "disk";
         device = "/dev/disk/by-id/wwn-0x500a0751e5ee2539";
         content = {
           type = "gpt";
           partitions = {
-            scratchPart = {
+            scratch = {
               size = "100%";
               content = {
                 type = "filesystem";
@@ -50,7 +50,7 @@
             };
           }; # partitions
         }; # content
-      }; # scratchDisk
+      }; # scratch
     }; # disk
     zpool = {
       rpool = {
