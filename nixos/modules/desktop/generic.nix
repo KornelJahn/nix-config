@@ -53,10 +53,7 @@ in
       };
     };
 
-    security = {
-      polkit.enable = true;
-      rtkit.enable = true;
-    };
+    security.rtkit.enable = true;
 
     services = {
       # Brother DCP-L2560DW printer CUPS setup:
