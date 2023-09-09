@@ -33,7 +33,7 @@ Feel free to grab some inspiration from this repo but do not depend on it. Remem
 
 3. Enter a host-specific installer devshell of this flake as follows
 
-        nix develop --experimental-features 'nix-command flakes' github:KornelJahn/nixos-config#<hostname>
+        nix develop --experimental-features 'nix-command flakes' github:KornelJahn/nix-config#<hostname>
 
 4. Store ZFS encryption passphrase and user password in advance for unattended formatting and installation:
 
