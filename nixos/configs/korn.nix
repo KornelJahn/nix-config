@@ -8,7 +8,9 @@ in
     isNormalUser = true;
     uid = 1000;
     passwordFile = "/persist/secrets/korn-password";
-    openssh.authorizedKeys.keys = [ ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHG9IfhgH2JsPImpEcG0k1rXDgBsiWtCSvsY2udJUH89 korn@c236m"
+    ];
     shell = pkgs.bashInteractive;
     extraGroups = [
       "wheel"
