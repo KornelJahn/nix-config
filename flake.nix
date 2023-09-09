@@ -45,6 +45,10 @@
           inherit specialArgs;
           modules = [ ./nixos/configs/x13.nix ];
         };
+        c236m = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [ ./nixos/configs/c236m.nix ];
+        };
       };
 
       homeConfigurations = {
@@ -52,6 +56,11 @@
           inherit extraSpecialArgs;
           inherit (self.nixosConfigurations.x13) pkgs;
           modules = [ ./home/configs/korn-at-x13.nix ];
+        };
+        "korn@c236m" = home-manager.lib.homeManagerConfiguration {
+          inherit extraSpecialArgs;
+          inherit (self.nixosConfigurations.c236m) pkgs;
+          modules = [ ./home/configs/korn-at-c236m.nix ];
         };
       };
     };
