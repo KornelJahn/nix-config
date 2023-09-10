@@ -12,7 +12,7 @@
     desktop.enable = true;
     gaming.devilutionx.enable = true;
     network = {
-      # shares.enable = true;
+      shares.enable = true;
       tailscale.enable = true;
     };
     virtualization.enable = true;
