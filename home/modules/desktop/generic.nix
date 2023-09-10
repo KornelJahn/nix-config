@@ -18,7 +18,8 @@ in
       xorg.xeyes # to check whether an app is using Xwayland :)
 
       # Additional apps
-      ffmpeg # to record and convert audio and video
+      ffmpeg-full # to record and convert audio and video
+      v4l-utils # Video 4 Linux 2 utils to record from video sources
       gimp # raster graphics editor
       gnome.simple-scan # scanning utility
       inkscape # vector-graphics editor
