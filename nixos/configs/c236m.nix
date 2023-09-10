@@ -53,6 +53,10 @@
   networking = {
     hostName = "c236m";
     interfaces.enp5s0.wakeOnLan.enable = true;
+
+    # Bridge for VMs
+    bridges.br0.interfaces = [ "enp5s0" ];
+    interfaces.br0.useDHCP = true;
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
