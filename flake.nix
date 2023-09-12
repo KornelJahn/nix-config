@@ -21,7 +21,7 @@
       inherit (self) outputs;
       specialArgs = { inherit inputs outputs; };
       extraSpecialArgs = specialArgs;
-      systems = [ "x86_64-linux" ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
       forEachSystem = nixpkgs.lib.genAttrs systems;
       forEachPkgs = f: forEachSystem (sys: (f nixpkgs.legacyPackages.${sys}));
     in
@@ -41,26 +41,36 @@
       ];
 
       nixosConfigurations = {
-        x13 = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/x13.nix ];
-        };
         c236m = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = [ ./nixos/configs/c236m.nix ];
         };
+        rpi4alpha = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [ ./nixos/configs/rpi4alpha.nix ];
+        };
+        x13 = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [ ./nixos/configs/x13.nix ];
+        };
       };
 
       homeConfigurations = {
-        "korn@x13" = home-manager.lib.homeManagerConfiguration {
-          inherit extraSpecialArgs;
-          inherit (self.nixosConfigurations.x13) pkgs;
-          modules = [ ./home/configs/korn-at-x13.nix ];
-        };
         "korn@c236m" = home-manager.lib.homeManagerConfiguration {
           inherit extraSpecialArgs;
           inherit (self.nixosConfigurations.c236m) pkgs;
           modules = [ ./home/configs/korn-at-c236m.nix ];
+        };
+        # TODO:
+        # "korn@rpi4alpha" = home-manager.lib.homeManagerConfiguration {
+        #   inherit extraSpecialArgs;
+        #   inherit (self.nixosConfigurations.rpi4alpha) pkgs;
+        #   modules = [ ./home/configs/korn-at-rpi4alpha.nix ];
+        # };
+        "korn@x13" = home-manager.lib.homeManagerConfiguration {
+          inherit extraSpecialArgs;
+          inherit (self.nixosConfigurations.x13) pkgs;
+          modules = [ ./home/configs/korn-at-x13.nix ];
         };
       };
     };
