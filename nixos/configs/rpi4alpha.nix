@@ -20,9 +20,10 @@
 
   boot = {
     initrd.availableKernelModules = [
-      # TODO
+      "xhci_pci"
+      "usbhid"
+      "usb_storage"
     ];
-    kernelModules = [ "kvm-intel" ];
     loader.systemd-boot.enable = true;
   };
 
@@ -31,10 +32,6 @@
     "/var/log".neededForBoot = true;
     "/persist".neededForBoot = true;
   };
-
-  swapDevices = [
-    # TODO
-  ];
 
   hardware = {
     opengl = {
@@ -48,8 +45,7 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
-  # TODO
-  # powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   system.stateVersion = "23.05";
 
