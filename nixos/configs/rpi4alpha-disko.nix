@@ -46,6 +46,9 @@
           relatime = "on";
           normalization = "formD";
           mountpoint = "none";
+          encryption = "aes-256-gcm";
+          keyformat = "passphrase";
+          keylocation = "file:///tmp/rpool-passphrase";
           compression = "lz4";
           "com.sun:auto-snapshot" = "false";
         };
