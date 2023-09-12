@@ -34,10 +34,7 @@
   };
 
   hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-    };
+    opengl.enable = true;
   };
 
   networking.hostName = "rpi4alpha";
