@@ -16,14 +16,6 @@
                 mountpoint = "/boot";
               };
             };
-            vm = {
-              size = "128G";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/var/lib/libvirt/images";
-              };
-            };
             root = {
               size = "100%";
               content = {
@@ -34,6 +26,23 @@
           }; # partitions
         }; # content
       }; # system
+      vm = {
+        type = "disk";
+        device = "/dev/disk/by-id/wwn-0x500a0751e67d29e6";
+        content = {
+          type = "gpt";
+          partitions = {
+            vm = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/var/lib/libvirt/images";
+              };
+            };
+          }; # partitions
+        }; # content
+      }; # vm
       scratch = {
         type = "disk";
         device = "/dev/disk/by-id/wwn-0x500a0751e5ee2539";
