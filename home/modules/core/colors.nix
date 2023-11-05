@@ -7,7 +7,7 @@ in
   imports = [ nix-colors.homeManagerModule ];
 
   # To match the Mint-Y GTK theme, select a colorscheme with neutral grays
-  colorscheme = nix-colors.colorSchemes.ia-dark;
+  colorscheme = nix-colors.colorSchemes.decaf;
 
   programs.dircolors.enable = true;
 
