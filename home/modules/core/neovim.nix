@@ -27,9 +27,8 @@ in
     plugins = with pkgs.vimPlugins; [
       {
         plugin = nvim-base16;
+        type = "lua";
         config = ''
-          lua << EOF
-
           local function isempty(s)
             return s == nil or s == ""
           end
@@ -43,10 +42,10 @@ in
 
           vim.opt.background = "dark"
           if is_tty then
-            vim.cmd([[colorscheme ron]])
+            vim.cmd.colorscheme("ron")
           else
             vim.opt.termguicolors = true
-            vim.cmd([[colorscheme base16-${config.colorscheme.slug}]])
+            vim.cmd.colorscheme("base16-${config.colorscheme.slug}")
           end
 
           -- Fix float window and border bg color
@@ -62,14 +61,22 @@ in
               bg="#${config.colorscheme.colors.base01}"
             }
           )
-          EOF
+          -- vim.cmd.highlight({
+          --   "NormalFloat",
+          --   "fg=#${config.colorscheme.colors.base05}",
+          --   "bg=#${config.colorscheme.colors.base01}"
+          -- })
+          -- vim.cmd.highlight({
+          --   "FloatBorder",
+          --   "fg=#${config.colorscheme.colors.base05}",
+          --   "bg=#${config.colorscheme.colors.base01}"
+          -- })
         '';
       } # nvim-base16
       {
         plugin = lualine-nvim;
+        type = "lua";
         config = ''
-          lua << EOF
-
           require("lualine").setup{
             options = {
               icons_enabled = false,
@@ -79,15 +86,12 @@ in
               component_separators = "",
             }
           }
-
-          EOF
         '';
       } # lualine-nvim
       {
         plugin = trouble-nvim;
+        type = "lua";
         config = ''
-          lua << EOF
-
           require("trouble").setup{
             -- Disable icons
             icons = false,
@@ -96,32 +100,30 @@ in
             -- Add an indent guide below the fold icons
             indent_lines = false,
             signs = {
-                -- Icons / text used for a diagnostic
-                error = "E",
-                warning = "W",
-                hint = "H",
-                information = "I"
+              -- Icons / text used for a diagnostic
+              error = "E",
+              warning = "W",
+              hint = "H",
+              information = "I"
             },
             -- Disable signs defined in your lsp client
             use_diagnostic_signs = false
           }
-
-          EOF
         '';
       } # trouble-nvim
       {
         plugin = julia-vim;
+        type = "lua";
         config = ''
-          lua << EOF
-
           vim.g.julia_indent_align_brackets = 0
           vim.g.julia_indent_align_funcargs = 0
 
-          EOF
+          vim.keymap.set("", "<leader>t", [[:TroubleToggle<CR>]])
         '';
       } # julia-vim
       {
         plugin = nvim-lspconfig;
+        type = "lua";
         config =
           let
             # WORKAROUND: pylsp not in PATH
@@ -130,8 +132,6 @@ in
             '';
           in
           ''
-            lua << EOF
-
             local lspconfig = require("lspconfig")
 
             lspconfig["rnix"].setup{
@@ -155,20 +155,19 @@ in
             vim.diagnostic.config({virtual_text = false})
 
             -- Show line diagnostics automatically in hover window
-            vim.o.updatetime = 250
-            vim.cmd([[
-              autocmd CursorHold,CursorHoldI *
-              \ lua vim.diagnostic.open_float(nil, {focus = false})
-            ]])
-
-            EOF
+            vim.opt.updatetime = 250
+            vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+              pattern = {"*"},
+              callback = function()
+                vim.diagnostic.open_float(nil, {focus = false})
+              end
+            })
           '';
       } # nvim-lspconfig
       {
         plugin = nvim-cmp;
+        type = "lua";
         config = ''
-          lua << EOF
-
           local cmp = require("cmp")
           local select_opts = {behavior = cmp.SelectBehavior.Select}
 
@@ -208,8 +207,6 @@ in
               {name = 'path'},
             }),
           }
-
-          EOF
         '';
       } # nvim-cmp
       cmp-nvim-lsp
@@ -218,9 +215,8 @@ in
       # FIXME: make option acceptance work in cmdline completion menu
       # {
       #   plugin = cmp-cmdline;
+      #   type = "lua";
       #   config = ''
-      #     lua << EOF
-
       #     local cmp = require("cmp")
 
       #     -- Use buffer source for `/`
@@ -242,24 +238,60 @@ in
       #       }),
       #       formatting = {fields = {'menu', 'abbr'}},
       #     })
-
-
-      #     EOF
       #   '';
       # }
 
+      {
+        plugin = vim-dasht;
+        type = "lua";
+        config = ''
+          -- https://github.com/sunaku/vim-dasht#dashtvim
+
+          -- Search docsets for something you type
+          -- Related docsets only
+          vim.keymap.set("n", "<leader>k", [[:Dasht<space>]])
+          -- All the docsets
+          vim.keymap.set("n", "<leader><leader>k",  [[:Dasht!<space>]])
+
+          -- Search docsets for words under the cursor
+          -- Related docsets only
+          vim.keymap.set(
+            "n", "<leader>K",
+            [[:call Dasht(dasht#cursor_search_terms())<return>]],
+            { silent = true }
+          )
+          -- All the docsets
+          vim.keymap.set(
+            "n", "<leader><leader>K",
+            [[:call Dasht(dasht#cursor_search_terms(), '!')<return>]],
+            { silent = true }
+          )
+
+          -- Search docsets for selected text
+          -- Related docsets only
+          vim.keymap.set(
+            "v", "<leader>K",
+            [[y:<C-U>call Dasht(getreg(0))<return>]],
+            { silent = true }
+          )
+          -- All the docsets
+          vim.keymap.set(
+            "v", "<leader><leader>K",
+            [[y:<C-U>call Dasht(getreg(0), '!')<return>]],
+            { silent = true }
+          )
+        '';
+      } # vim-dasht
       vim-commentary
-      vim-dasht
       vim-markdown
       vim-nix
       vim-obsession
       vim-toml
     ];
 
-    extraConfig = ''
-      lua << EOF
-
+    extraLuaConfig = ''
       vim.opt.splitright = true
+      vim.opt.number = true
       vim.opt.relativenumber = true
       vim.opt.colorcolumn = "+1"
       vim.opt.textwidth = 79
@@ -272,89 +304,65 @@ in
       vim.opt.modelines = 5
       vim.opt.list = true
       vim.opt.listchars = {tab = "▸ ", trail = "·"}
-      vim.opt.signcolumn = "yes:1"
+      vim.opt.signcolumn = "number"
       vim.opt.completeopt = {"menu", "menuone", "noselect"}
 
       -- Italic comments
-      vim.cmd([[hi Comment cterm=italic gui=italic]])
-      vim.cmd([[hi Todo cterm=italic gui=italic]])
+      vim.cmd.highlight({"Comment", "cterm=italic", "gui=italic"})
+      vim.cmd.highlight({"Todo", "cterm=italic", "gui=italic"})
 
       -- File type-specific settings
 
       -- Set wraparound for Markdown
-      vim.cmd([[au BufRead,BufNewFile *.md setlocal tw=79 wrap linebreak]])
+      vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+        pattern = {"*.md"},
+        callback = function()
+          vim.opt_local.textwidth = 79
+          vim.opt_local.wrap = true
+          vim.opt_local.linebreak = true
+        end
+      })
+      -- ftplugin for xdefaults has a wrong commenting
+      vim.api.nvim_create_autocmd({"FileType"}, {
+        pattern = {"xdefaults"},
+        callback = function()
+          vim.opt.commentstring = "! %s"
+        end
+      })
 
       vim.g.mapleader = ","
 
-      EOF
+      -- Copy to clipboard
+      vim.keymap.set("v", "<leader>y", '"+y')
+      vim.keymap.set("n", "<leader>Y", '"+yg_')
+      vim.keymap.set("n", "<leader>y", '"+y')
+      vim.keymap.set("n", "<leader>yy", '"+yy')
+      -- Paste from clipboard
+      vim.keymap.set("n", "<leader>p", '"+p')
+      vim.keymap.set("n", "<leader>P", '"+P')
+      vim.keymap.set("v", "<leader>p", '"+p')
+      vim.keymap.set("v", "<leader>P", '"+P')
+      -- Re-copy after pasting from buffer to easily paste multiple times
+      -- https://stackoverflow.com/a/7164121
+      vim.keymap.set("v", "p", 'pgvy')
 
-      """" KEYBOARD SHORTCUTS
+      -- Move cursor by display lines (and not physical ones)
+      vim.keymap.set("n", "k", 'gk', { silent = true })
+      vim.keymap.set("n", "j", 'gj', { silent = true })
+      vim.keymap.set("n", "0", 'g0', { silent = true })
+      vim.keymap.set("n", "$", 'g$', { silent = true })
 
-      " Copy & paste to/from the clipboard
-
-      " Copy to clipboard
-      vnoremap  <leader>y  "+y
-      nnoremap  <leader>Y  "+yg_
-      nnoremap  <leader>y  "+y
-      nnoremap  <leader>yy  "+yy
-      " Paste from clipboard
-      nnoremap <leader>p "+p
-      nnoremap <leader>P "+P
-      vnoremap <leader>p "+p
-      vnoremap <leader>P "+P
-      " Re-copy after pasting from buffer to easily paste multiple times
-      " https://stackoverflow.com/a/7164121
-      vnoremap p pgvy
-
-      " Delete trailing white space
-      noremap <leader>w :call DeleteTrailingWhiteSpace()<CR>
-
-      " Move cursor by display lines (and not physical ones)
-      noremap <silent> k gk
-      noremap <silent> j gj
-      noremap <silent> 0 g0
-      noremap <silent> $ g$
-
-      " Trouble integration
-      noremap <leader>t :TroubleToggle<CR>
-
-      " Dasht integration
-      " https://github.com/sunaku/vim-dasht#dashtvim
-
-      " Search docsets for something typed in
-      " Related docsets only
-      nnoremap <leader>k :Dasht<space>
-      " All the docsets
-      nnoremap <leader><leader>k :Dasht!<space>
-
-      " Search docsets for words under the cursor
-      " Related docsets only
-      nnoremap <leader>K :call Dasht(dasht#cursor_search_terms())<return>
-      " All the docsets
-      nnoremap <leader>K :call
-        \ Dasht(dasht#cursor_search_terms(), '!')<return>
-
-      " Search docsets for selected text
-      " Related docsets only
-      vnoremap <silent> <leader>K y:<C-U>call Dasht(getreg(0))<return>
-      " All the docsets
-      vnoremap <silent>
-        \ <leader><leader>K y:<C-U>call Dasht(getreg(0), '!')<return>
-
-      """" CUSTOM FUNCTIONS
-
-      " Delete trailing white space
-      " https://stackoverflow.com/a/3475364
-      function! DeleteTrailingWhiteSpace()
-        exe "normal mz"
-        %s/\s\+$//ge
-        exe "normal `z"
-      endfunction
-
-      """" WORKAROUNDS
-
-      " ftplugin for xdefaults has a wrong commenting
-      autocmd FileType xdefaults set commentstring=!\ %s
+      -- Delete trailing white space
+      -- https://stackoverflow.com/a/3475364
+      vim.keymap.set(
+        "n",
+        "<leader>w",
+        function()
+          vim.cmd([[exe "normal mz"]])
+          vim.cmd([[%s/\s\+$//ge]])
+          vim.cmd([[exe "normal `z"]])
+        end
+      )
     '';
   };
 }
