@@ -45,9 +45,9 @@
           inherit specialArgs;
           modules = [ ./nixos/configs/c236m.nix ];
         };
-        rpi4alpha = nixpkgs.lib.nixosSystem {
+        rpi4 = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
-          modules = [ ./nixos/configs/rpi4alpha.nix ];
+          modules = [ ./nixos/configs/rpi4.nix ];
         };
         x13 = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
@@ -62,10 +62,10 @@
           modules = [ ./home/configs/korn-at-c236m.nix ];
         };
         # TODO:
-        # "korn@rpi4alpha" = home-manager.lib.homeManagerConfiguration {
+        # "korn@rpi4" = home-manager.lib.homeManagerConfiguration {
         #   inherit extraSpecialArgs;
-        #   inherit (self.nixosConfigurations.rpi4alpha) pkgs;
-        #   modules = [ ./home/configs/korn-at-rpi4alpha.nix ];
+        #   inherit (self.nixosConfigurations.rpi4) pkgs;
+        #   modules = [ ./home/configs/korn-at-rpi4.nix ];
         # };
         "korn@x13" = home-manager.lib.homeManagerConfiguration {
           inherit extraSpecialArgs;

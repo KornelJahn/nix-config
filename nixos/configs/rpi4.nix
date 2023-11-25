@@ -37,7 +37,7 @@
     opengl.enable = true;
   };
 
-  networking.hostName = "rpi4alpha";
+  networking.hostName = "rpi4";
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
@@ -45,4 +45,4 @@
 
   system.stateVersion = "23.05";
 
-} // (import ./rpi4alpha-disko.nix)
+} // (import ./rpi4-disko.nix)
