@@ -63,9 +63,6 @@ in
       # Model: IPP Everywhere
       printing.enable = true;
 
-      # TODO: replace by ssh-agent?
-      # gnome.gnome-keyring.enable = true;
-
       upower.enable = true;
 
       pipewire = {
