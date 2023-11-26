@@ -13,26 +13,26 @@
 
   home.stateVersion = "23.05";
 
-  # FIXME: look up make, model, and serial info
-  # services.kanshi.profiles = {
-  #   undocked = {
-  #     outputs = [
-  #       { criteria = "eDP-1"; }
-  #     ];
-  #   };
-  #   docked = {
-  #     outputs = [
-  #       {
-  #         criteria = "eDP-1";
-  #         position = "1920,0";
-  #       }
-  #       {
-  #         # Use make-model-serial criterion for external monitors as the name
-  #         # (DP-?) may change when reconnected
-  #         criteria = "TODO";
-  #         position = "0,0";
-  #       }
-  #     ];
-  #   };
-  # };
+  services.kanshi.profiles = {
+    undocked = {
+      outputs = [
+        { criteria = "eDP-1"; }
+      ];
+    };
+    docked = {
+      outputs = [
+        {
+          criteria = "eDP-1";
+          position = "1920,0";
+        }
+        {
+          # Use make-model-serial criterion for external monitors as the name
+          # (DP-?) may change when reconnected. Get it using:
+          #     swaymsg -t get_outputs
+          criteria = "Iiyama North America PL2493H 1211424213213";
+          position = "0,0";
+        }
+      ];
+    };
+  };
 }
