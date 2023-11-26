@@ -4,6 +4,6 @@
   imports = [
     ./devilutionx.nix
     # ./steam.nix
-    # ./wine.nix
+    ./wine.nix
   ];
 }
