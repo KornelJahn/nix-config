@@ -14,7 +14,12 @@
 
   services.fail2ban.enable = true;
 
-  programs.ssh.startAgent = true;
+  programs.ssh = {
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+    startAgent = true;
+  };
 
   services.openssh = {
     enable = true;
