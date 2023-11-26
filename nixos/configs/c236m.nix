@@ -1,5 +1,8 @@
 { config, pkgs, lib, inputs, outputs, ... }:
 
+let
+  lanIface = "enp5s0";
+in
 {
   imports = [
     inputs.nixpkgs.nixosModules.notDetected
@@ -55,7 +58,7 @@
     interfaces.enp5s0.wakeOnLan.enable = true;
 
     # Bridge for VMs
-    bridges.br0.interfaces = [ "enp5s0" ];
+    bridges.br0.interfaces = [ lanIface ];
     interfaces.br0.useDHCP = true;
   };
 
@@ -69,7 +72,7 @@
     serviceConfig = {
       Type = "simple";
       RemainAfterExit = "true";
-      ExecStart = "${pkgs.ethtool}/sbin/ethtool -s enp5s0 wol g";
+      ExecStart = "${pkgs.ethtool}/sbin/ethtool -s ${lanIface} wol g";
     };
     wantedBy = [ "default.target" ];
   };
