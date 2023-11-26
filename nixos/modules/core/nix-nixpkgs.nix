@@ -6,13 +6,15 @@
       automatic = true;
       dates = "weekly";
     };
-    package = pkgs.nixVersions.nix_2_16;
+    # TODO: update
+    package = pkgs.nixVersions.nix_2_17;
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
       trusted-users = [ "root" "@wheel" ];
       # FIXME: breaks Home Manager which still uses "nix-env" instead of "nix
       # profile"
+      # https://github.com/nix-community/home-manager/issues/4593
       # use-xdg-base-directories = true;
       warn-dirty = false;
     };
