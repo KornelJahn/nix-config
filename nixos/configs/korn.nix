@@ -9,7 +9,7 @@ in
     uid = 1000;
     passwordFile = "/persist/secrets/korn-password";
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHG9IfhgH2JsPImpEcG0k1rXDgBsiWtCSvsY2udJUH89 korn@c236m"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzlFAVz0HuwMRm/I8NO0XlKOh0ridZ7NuNJ6IeyRTZ5 korn@c236m"
     ];
     shell = pkgs.bashInteractive;
     extraGroups = [
