@@ -41,6 +41,10 @@
       ];
 
       nixosConfigurations = {
+        b550 = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [ ./nixos/configs/b550.nix ];
+        };
         c236m = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = [ ./nixos/configs/c236m.nix ];
@@ -56,6 +60,11 @@
       };
 
       homeConfigurations = {
+        "korn@b550" = home-manager.lib.homeManagerConfiguration {
+          inherit extraSpecialArgs;
+          inherit (self.nixosConfigurations.b550) pkgs;
+          modules = [ ./home/configs/korn-at-b550.nix ];
+        };
         "korn@c236m" = home-manager.lib.homeManagerConfiguration {
           inherit extraSpecialArgs;
           inherit (self.nixosConfigurations.c236m) pkgs;
