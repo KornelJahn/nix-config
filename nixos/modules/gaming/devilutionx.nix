@@ -11,7 +11,6 @@ in
   config = lib.mkIf cfg.enable {
     networking.firewall = {
       allowedTCPPorts = [ 6112 ];
-      allowedUDPPorts = [ 6112 ];
     };
   };
 }
