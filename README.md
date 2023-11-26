@@ -49,10 +49,9 @@ That's all! :sunglasses:
 
 1. Activate Home Manager:
 
-        nix profile list
-        home-manager switch --flake github:KornelJahn/nixos-config
+        home-manager switch --flake github:KornelJahn/nix-config
 
-   The `nix profile list` is a temporary workaround, otherwise `home-manager` will fail with the following error message:
+   Execute `nix profile list` before switching if `home-manager` fails with the following error message:
 
         Could not find suitable profile directory, [...]
 
