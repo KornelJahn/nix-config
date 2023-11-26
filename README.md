@@ -6,16 +6,16 @@ Personal [NixOS][nixos] and [Home Manager][home-manager] (HM) configurations, al
 
 Highlights:
 
-- Fully declarative configurations of multiple NixOS configurations of laptops and workstations (:wrench: under construction :wrench:)
+- Fully declarative configurations of multiple NixOS configurations of laptops and workstations
 - Encrypted ZFS-based root file system with automatic partitioning and formatting provided by [disko][disko]
 - Ephemeral dataset for `/` (through restoring a blank snapshot on boot) and opt-in persistence with help of the [impermanence][impermanence] module
 - Mounted datasets nested under either `local` and `safe` parents, with only the latter group backed up (inspired by [Graham Christensen][erase-your-darlings])
 - Hosts in a private mesh network using [tailscale][tailscale]
 - Separate Home Manager configuration, also applicable to non-NixOS systems
 - NixOS and Home Manager modules included in the Flake output and reusable by other personal flakes
-- Declarative desktop environment based on Sway (Wayland) (:wrench: under construction :wrench:)
+- Declarative desktop environment based on Sway (Wayland)
 
-Feel free to grab some inspiration from this repo but do not depend on it. Remember: *"You don't want my crap, you want your own."* ([dasJ][dasj-dotfiles])
+Feel free to grab some inspiration from this repo but do not use it as a dependency. Please remember: *"You don't want my crap, you want your own."* ([dasJ][dasj-dotfiles])
 
 ## Installation
 
