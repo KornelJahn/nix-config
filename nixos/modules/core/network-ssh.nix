@@ -12,8 +12,6 @@
     );
   };
 
-  services.fail2ban.enable = true;
-
   programs.ssh = {
     extraConfig = ''
       AddKeysToAgent yes
