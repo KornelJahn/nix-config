@@ -1,7 +1,5 @@
 # Personal NixOS and Home Manager configs
 
-:wrench: UNDER CONSTRUCTION! :wrench:
-
 Personal [NixOS][nixos] and [Home Manager][home-manager] (HM) configurations, all contained in a Nix [flake][nix-flakes]. There may be some rough edges as Nix Flakes are still considered experimental.
 
 Highlights:
@@ -112,6 +110,14 @@ for partitioning of a single disk `disk1` only, or as
 for the creation of a new zpool `dpool` for newly added disks `disk3` and `disk4`, which have been introduced previously to the disko config.
 
 The values of options `-d` and `-p` must be valid (quoted) Nix expressions, lists of strings (names of disks and ZFS pools in the disko config, respectively).
+
+## To-do list
+
+- Complete *Management* section
+- Configure LSP-based completion in NeoVim
+- Configure MIME types in shell and Midnight Commander
+- Configure Actions Menu in Midnight Commander
+- Configure Directory Hotlist in Midnight Commander
 
 ## Acknowledgements
 
