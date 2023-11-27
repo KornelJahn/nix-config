@@ -55,7 +55,7 @@ in
             idle = 50;
             info = 70;
             warning = 90;
-            # inputs = ["Package id 0" "SMBUSMASTER 0" "Tctl"];
+            inputs = ["Package id 0" "SMBUSMASTER 0" "Tctl"];
           }
           {
             block = "net";
