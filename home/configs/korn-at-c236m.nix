@@ -10,7 +10,6 @@
     primaryDisplayResolution = { horizontal = 1680; vertical = 1050; };
 
     desktop.enable = true;
-    # gaming.devilutionx.enable = true;
   };
 
   home.stateVersion = "23.05";

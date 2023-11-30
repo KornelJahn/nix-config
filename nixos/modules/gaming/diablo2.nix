@@ -5,7 +5,7 @@ let
 in
 {
   options.my.gaming.diablo2 = {
-    enable = lib.mkEnableOption "Diablo 2 firewall settings";
+    enable = lib.mkEnableOption "Diablo 2: LoD firewall settings";
   };
 
   config = lib.mkIf cfg.enable {

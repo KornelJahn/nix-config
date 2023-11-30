@@ -10,7 +10,7 @@
     desktop.enable = true;
     gaming = {
       devilutionx.enable = true;
-      wine.enable = true;
+      diablo2.enable = true;
     };
   };
 
