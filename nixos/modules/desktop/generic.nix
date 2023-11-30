@@ -2,6 +2,7 @@
 
 let
   cfg = config.my.desktop.generic;
+  inherit (pkgs.stdenv.hostPlatform) system;
 in
 {
   options.my.desktop.generic = {
@@ -29,19 +30,18 @@ in
       };
     };
 
-    fonts.enableDefaultFonts = lib.mkDefault true;
+    fonts.enableDefaultPackages = lib.mkDefault true;
 
     hardware = {
       bluetooth = {
         enable = true;
-        package = pkgs.bluezFull;
         # WORKAROUND: fix bluetooth SAP (SIM Access Profile) related errors
         disabledPlugins = [ "sap" ];
       };
 
       sane = {
         enable = true;
-        brscan4 = {
+        brscan4 = lib.mkIf (system == "x86_64-linux") {
           enable = true;
           netDevices = {
             home = {

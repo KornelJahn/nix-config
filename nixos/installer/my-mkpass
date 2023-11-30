@@ -49,7 +49,7 @@ passwordfiles=$(
   nix eval --json "$flakedir#nixosConfigurations.$host.config.users.users" |
   jq --raw-output '
     [
-      .[].passwordFile
+      .[].hashedPasswordFile
       | select(. != null)
     ]
     | map("/tmp" + .)

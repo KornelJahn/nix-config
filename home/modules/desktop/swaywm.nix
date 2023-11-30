@@ -56,7 +56,7 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
       enable = true;
-      systemdIntegration = false;
+      systemd.enable = false;
       wrapperFeatures.gtk = true;
       xwayland = true;
       extraSessionCommands = ''
