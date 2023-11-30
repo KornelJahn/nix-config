@@ -13,7 +13,10 @@ in
 
   my = {
     desktop.enable = true;
-    gaming.devilutionx.enable = true;
+    gaming = {
+      devilutionx.enable = true;
+      diablo2.enable = true;
+    };
     network = {
       shares.enable = true;
       tailscale.enable = true;
