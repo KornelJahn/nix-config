@@ -72,7 +72,7 @@ let
         lib.optional config.my.gaming.devilutionx.enable {
           shortcut = "d";
           label = "[d]evilutionx";
-          cmd = "devilutionx";
+          cmd = "SDL_VIDEODRIVER=x11 devilutionx";
         }
       # ) ++ (
         # TODO: re-introduce when adding Steam
