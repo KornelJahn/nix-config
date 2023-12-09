@@ -280,6 +280,10 @@ in
           }
         ];
 
+        assigns = {
+          "9" = [ { app_id = "firefox"; } ];
+        };
+
         window = {
           border = 1;
           commands = [
@@ -296,13 +300,6 @@ in
               criteria = {
                 app_id = "firefox";
                 title = "^Mozilla Firefox Private Browsing$";
-              };
-            }
-            {
-              command = "move to workspace 9";
-              criteria = {
-                app_id = "firefox";
-                title = "Mozilla Firefox$";
               };
             }
           ];
