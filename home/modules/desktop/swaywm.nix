@@ -78,11 +78,6 @@ in
 
         terminal = "${pkgs.foot}/bin/footclient";
 
-        assigns = {
-          "8" = [{ app_id = "firefox"; title = "Mozilla Firefox Private Browsing"; }];
-          "9" = [{ app_id = "firefox"; }];
-        };
-
         bars = [
           {
             inherit fonts;
@@ -287,6 +282,30 @@ in
 
         window = {
           border = 1;
+          commands = [
+            {
+              command = "resize set 1600px 800px";
+              criteria = { app_id = "pavucontrol"; };
+            }
+            {
+              command = "move position center";
+              criteria = { floating = true; };
+            }
+            {
+              command = "move to workspace 8";
+              criteria = {
+                app_id = "firefox";
+                title = "^Mozilla Firefox Private Browsing$";
+              };
+            }
+            {
+              command = "move to workspace 9";
+              criteria = {
+                app_id = "firefox";
+                title = "Mozilla Firefox$";
+              };
+            }
+          ];
           hideEdgeBorders = "smart";
           titlebar = false;
         };
@@ -296,8 +315,6 @@ in
 
       extraConfig = ''
         floating_maximum_size 1900 x 1000
-        for_window [app_id="pavucontrol"] resize set 1600px 800px
-        for_window [floating] move position center
       '';
     }; # wayland.windowManager.sway
 
