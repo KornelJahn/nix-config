@@ -53,13 +53,32 @@ That's all! :sunglasses:
 
         Could not find suitable profile directory, [...]
 
-2. Fetch SSH keys.
+2. Deploy SSH keys for users using one of the following methods:
+
+  - Fetch existing keys.
+
+  - Generate new keys. Include new public key in `nixos/configs/<username>.nix` and switch config. Copy public key to required non-NixOS hosts and register new public key at Github, Gitlab etc.
 
 3. Clone this repo for development.
 
 ## Management
 
-:wrench: TODO: lock file update, NixOS and HM config switching, `nix flake check` and `nix fmt` :wrench:
+Below is a table of commands for common management tasks, where `FLAKE_URI` can either be a reference to the online repo (`github:KornelJahn/nix-config`) or a path to a local clone.
+
+| Operation | Command | Own HM shell alias |
+|-----------|---------|--------------------|
+| Collect garbage[^1] | `nix-collect-garbage [-d]` | |
+| Switch to new OS config | `sudo nixos-rebuild {switch|boot} --flake
+FLAKE_URI` | `nr {switch|boot}` |
+| Switch to new HM config | `sudo home-manager switch --flake FLAKE_URI` | `hm switch` |
+| Check the config[^2] | `nix flake check` | |
+| Format source files[^2] | `nix fmt` | |
+| Update the lock file[^2] | `nix flake` | |
+
+[^1]: The `-d` option also removes GC roots such as old system/HM configurations,
+making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is necessary to clean up boot menu entries.
+
+[^2]: To be executed within the repo directory.
 
 ## Troubleshooting
 
@@ -113,11 +132,12 @@ The values of options `-d` and `-p` must be valid (quoted) Nix expressions, list
 
 ## To-do list
 
-- Complete *Management* section
+- For increased consistency, when activating HM, switch to `nix run` the utility from the `home-manager` input (?)
 - Configure LSP-based completion in NeoVim
-- Configure MIME types in shell and Midnight Commander
-- Configure Actions Menu in Midnight Commander
-- Configure Directory Hotlist in Midnight Commander
+- Configure MIME types in shell and Midnight Commander (mc)
+- Configure Actions Menu in mc
+- Configure Directory Hotlist in mc
+- Make dircolors and mc colors consistent
 
 ## Acknowledgements
 
