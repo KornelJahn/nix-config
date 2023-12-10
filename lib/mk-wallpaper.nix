@@ -1,11 +1,13 @@
 # Render an SVG file into a PNG wallpaper with given resolution, optionally
 # colorized using a selected base16 color scheme.
 
-{
-  pkgs,
-  svgTemplate, # SVG with optional base16 color tokens such as ${base00}
-  colorscheme ? { }, # chosen nix-colors base16 color scheme
-  width ? 1920, # fixed width of the generated PNG
+{ pkgs
+  # SVG with optional base16 color tokens such as ${base00}
+, svgTemplate
+  # chosen nix-colors base16 color scheme
+, colorscheme ? { }
+  # fixed width of the generated PNG
+, width ? 1920
 }:
 
 let

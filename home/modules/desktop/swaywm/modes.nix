@@ -74,7 +74,7 @@ let
           label = "[d]evilutionx";
           cmd = "SDL_VIDEODRIVER=x11 devilutionx";
         }
-      # ) ++ (
+        # ) ++ (
         # TODO: re-introduce when adding Steam
         # lib.optional config.my.gaming.steam.enable {
         #   shortcut = "s";

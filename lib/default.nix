@@ -15,10 +15,11 @@ let
       shell =
         if (! builtins.hasAttr "disko" config)
         then null
-        else import ../nixos/installer/shell.nix {
-          inherit config pkgs inputs;
-          diskoPkgs = disko.packages.${system};
-        };
+        else
+          import ../nixos/installer/shell.nix {
+            inherit config pkgs inputs;
+            diskoPkgs = disko.packages.${system};
+          };
     in
     lib.optionalAttrs (shell != null) { ${system}.${name} = shell; };
 

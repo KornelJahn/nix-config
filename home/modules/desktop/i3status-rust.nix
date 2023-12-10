@@ -11,8 +11,8 @@ in
   config = lib.mkIf cfg.enable {
     # WORKAROUND
     xdg.configFile."i3status-rust/config.toml".source =
-     config.lib.file.mkOutOfStoreSymlink
-       "${config.xdg.configHome}/i3status-rust/config-default.toml";
+      config.lib.file.mkOutOfStoreSymlink
+        "${config.xdg.configHome}/i3status-rust/config-default.toml";
 
     programs.i3status-rust = with config.colorscheme.colors; {
       enable = true;
@@ -55,7 +55,7 @@ in
             idle = 50;
             info = 70;
             warning = 90;
-            inputs = ["Package id 0" "SMBUSMASTER 0" "Tctl"];
+            inputs = [ "Package id 0" "SMBUSMASTER 0" "Tctl" ];
           }
           {
             block = "net";

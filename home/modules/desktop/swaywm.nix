@@ -281,7 +281,7 @@ in
         ];
 
         assigns = {
-          "9" = [ { app_id = "firefox"; } ];
+          "9" = [{ app_id = "firefox"; }];
         };
 
         window = {
