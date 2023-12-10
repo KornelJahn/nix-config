@@ -67,15 +67,14 @@ Below is a table of commands for common management tasks, where `URI` can either
 
 | Operation | Command | Own HM shell alias |
 |-----------|---------|--------------------|
-| Collect garbage[^1] | `nix-collect-garbage [-d]` | |
+| Collect garbage (system-wide)[^1] | `sudo nix-collect-garbage [-d]` | |
 | Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake URI` | `nr {switch\|boot}` |
 | Switch to new HM config | `home-manager switch --flake URI` | `hm switch` |
 | Check the config[^2] | `nix flake check` | |
 | Format source files[^2] | `nix fmt` | |
-| Update & commit the lock file[^2] | `nix flake update --commit-lock-file [INPUT ...]` | |
+| Update & commit the lock file[^2] | `nix flake update --commit-lock-file` | |
 
-[^1]: The `-d` option also removes GC roots such as old system/HM configurations,
-making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is necessary to clean up boot menu entries.
+[^1]: The `-d` option also removes GC roots such as old system/HM configurations, making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is needed to clean up boot menu entries.
 
 [^2]: To be executed within the repo directory.
 
