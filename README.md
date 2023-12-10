@@ -63,16 +63,16 @@ That's all! :sunglasses:
 
 ## Management
 
-Below is a table of commands for common management tasks, where `FLAKE_URI` can either be a reference to the online repo (`github:KornelJahn/nix-config`) or a path to a local clone.
+Below is a table of commands for common management tasks, where `URI` can either be a reference to the online Flake repo (`github:KornelJahn/nix-config`) or a path to a local clone.
 
 | Operation | Command | Own HM shell alias |
 |-----------|---------|--------------------|
 | Collect garbage[^1] | `nix-collect-garbage [-d]` | |
-| Switch to new OS config | `sudo nixos-rebuild { switch &#124; boot } --flake FLAKE_URI` | `nr { switch &#124; boot }` |
-| Switch to new HM config | `home-manager switch --flake FLAKE_URI` | `hm switch` |
+| Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake URI` | `nr {switch\|boot}` |
+| Switch to new HM config | `home-manager switch --flake URI` | `hm switch` |
 | Check the config[^2] | `nix flake check` | |
 | Format source files[^2] | `nix fmt` | |
-| Update the lock file[^2] | `nix flake update [ --update-input FLAKE_INPUT ] --commit-lock-file` | |
+| Update the lock file[^2] | `nix flake update [--update-input INPUT] --commit-lock-file` | |
 
 [^1]: The `-d` option also removes GC roots such as old system/HM configurations,
 making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is necessary to clean up boot menu entries.
