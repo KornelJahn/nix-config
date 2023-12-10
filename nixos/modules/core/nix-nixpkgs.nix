@@ -5,9 +5,9 @@
     gc = {
       automatic = true;
       dates = "weekly";
+      options = "--delete-older-than 30d";
     };
-    # TODO: update
-    package = pkgs.nixVersions.nix_2_17;
+    package = pkgs.nixVersions.nix_2_18;
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
@@ -19,15 +19,12 @@
       warn-dirty = false;
     };
 
-    # Credits: Misterio77
-    # https://raw.githubusercontent.com/Misterio77/nix-config/e227d8ac2234792138753a0153f3e00aec154c39/hosts/common/global/nix.nix
-
     # Add each flake input as a registry
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    registry = lib.mapAttrs (_: v: { flake = v; }) inputs;
 
     # Map registries to channels (useful when using legacy commands)
     nixPath = lib.mapAttrsToList
-      (name: value: "${name}=${value.to.path}")
+      (n: v: "${n}=${v.to.path}")
       config.nix.registry;
   };
 
