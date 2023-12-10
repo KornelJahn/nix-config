@@ -68,8 +68,7 @@ Below is a table of commands for common management tasks, where `FLAKE_URI` can 
 | Operation | Command | Own HM shell alias |
 |-----------|---------|--------------------|
 | Collect garbage[^1] | `nix-collect-garbage [-d]` | |
-| Switch to new OS config | `sudo nixos-rebuild { switch &#124 boot } --flake
-FLAKE_URI` | `nr { switch &#124 boot }` |
+| Switch to new OS config | `sudo nixos-rebuild { switch &#124; boot } --flake FLAKE_URI` | `nr { switch &#124; boot }` |
 | Switch to new HM config | `home-manager switch --flake FLAKE_URI` | `hm switch` |
 | Check the config[^2] | `nix flake check` | |
 | Format source files[^2] | `nix fmt` | |
