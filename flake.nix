@@ -22,8 +22,28 @@
       specialArgs = { inherit inputs outputs; };
       extraSpecialArgs = specialArgs;
       systems = [ "x86_64-linux" "aarch64-linux" ];
+      hosts = [
+        "b550"
+        "c236m"
+        # "rpi4"
+        "x13"
+      ];
+
       forEachSystem = nixpkgs.lib.genAttrs systems;
       forEachPkgs = f: forEachSystem (sys: (f nixpkgs.legacyPackages.${sys}));
+      mkNixosConfig = host: {
+        "${host}" = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [ ./nixos/configs/${host}.nix ];
+        };
+      };
+      mkHomeConfig = user: host: {
+        "${user}@${host}" = home-manager.lib.homeManagerConfiguration {
+          inherit extraSpecialArgs;
+          inherit (self.nixosConfigurations.${host}) pkgs;
+          modules = [ ./home/configs/${user}-at-${host}.nix ];
+        };
+      };
     in
     {
       lib = import ./lib inputs;
@@ -40,47 +60,10 @@
         (self.lib.gatherHomeCfgActivationPkgs self.homeConfigurations)
       ];
 
-      nixosConfigurations = {
-        b550 = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/b550.nix ];
-        };
-        c236m = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/c236m.nix ];
-        };
-        rpi4 = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/rpi4.nix ];
-        };
-        x13 = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/x13.nix ];
-        };
-      };
+      nixosConfigurations = self.lib.recursiveMergeAttrs
+        (map mkNixosConfig hosts);
 
-      homeConfigurations = {
-        "korn@b550" = home-manager.lib.homeManagerConfiguration {
-          inherit extraSpecialArgs;
-          inherit (self.nixosConfigurations.b550) pkgs;
-          modules = [ ./home/configs/korn-at-b550.nix ];
-        };
-        "korn@c236m" = home-manager.lib.homeManagerConfiguration {
-          inherit extraSpecialArgs;
-          inherit (self.nixosConfigurations.c236m) pkgs;
-          modules = [ ./home/configs/korn-at-c236m.nix ];
-        };
-        # TODO:
-        # "korn@rpi4" = home-manager.lib.homeManagerConfiguration {
-        #   inherit extraSpecialArgs;
-        #   inherit (self.nixosConfigurations.rpi4) pkgs;
-        #   modules = [ ./home/configs/korn-at-rpi4.nix ];
-        # };
-        "korn@x13" = home-manager.lib.homeManagerConfiguration {
-          inherit extraSpecialArgs;
-          inherit (self.nixosConfigurations.x13) pkgs;
-          modules = [ ./home/configs/korn-at-x13.nix ];
-        };
-      };
+      homeConfigurations = self.lib.recursiveMergeAttrs
+        (map (mkHomeConfig "korn") hosts);
     };
 }
