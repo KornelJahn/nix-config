@@ -72,7 +72,7 @@ Below is a table of commands for common management tasks, where `FLAKE_URI` can 
 | Switch to new HM config | `home-manager switch --flake FLAKE_URI` | `hm switch` |
 | Check the config[^2] | `nix flake check` | |
 | Format source files[^2] | `nix fmt` | |
-| Update the lock file[^2] | `nix flake` | |
+| Update the lock file[^2] | `nix flake update [ --update-input FLAKE_INPUT ] --commit-lock-file` | |
 
 [^1]: The `-d` option also removes GC roots such as old system/HM configurations,
 making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is necessary to clean up boot menu entries.
