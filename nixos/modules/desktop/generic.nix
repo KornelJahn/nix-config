@@ -46,7 +46,7 @@ in
           netDevices = {
             home = {
               model = "DCP-L2560DW";
-              nodename = "mfprinter.home.arpa";
+              nodename = "mfp.home.arpa";
             };
           };
         };
@@ -58,7 +58,7 @@ in
     services = {
       # Brother DCP-L2560DW printer CUPS setup:
       # Protocol: IPP
-      # URI: ipp://mfprinter.home.arpa:631/ipp/print
+      # URI: ipp://mfp.home.arpa:631/ipp/print
       # Make: Generic
       # Model: IPP Everywhere
       printing.enable = true;
