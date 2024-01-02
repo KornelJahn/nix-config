@@ -10,7 +10,7 @@
 
   my = {
     desktop.enable = true;
-    gaming.devilutionx.enable = true;
+    gaming.devilutionx.enable = false;
     network = {
       shares.enable = false;
       tailscale.enable = true;
@@ -43,6 +43,6 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 
 } // (import ./rpi4-disko.nix)
