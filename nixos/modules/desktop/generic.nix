@@ -2,7 +2,6 @@
 
 let
   cfg = config.my.desktop.generic;
-  inherit (pkgs.stdenv.hostPlatform) system;
 in
 {
   options.my.desktop.generic = {
@@ -17,52 +16,19 @@ in
 
       # Make applications find files in <prefix>/share
       pathsToLink = [ "/share" "/libexec" ];
-
-      persistence."/persist" = {
-        directories = [
-          { directory = "/var/lib/cups"; mode = "u=rwx,g=rx,o=rx"; }
-          {
-            directory = "/var/cache/cups";
-            group = "lp";
-            mode = "u=rwx,g=rwx,o=";
-          }
-        ];
-      };
     };
 
     fonts.enableDefaultPackages = lib.mkDefault true;
 
-    hardware = {
-      bluetooth = {
-        enable = true;
-        # WORKAROUND: fix bluetooth SAP (SIM Access Profile) related errors
-        disabledPlugins = [ "sap" ];
-      };
-
-      sane = {
-        enable = true;
-        brscan4 = lib.mkIf (system == "x86_64-linux") {
-          enable = true;
-          netDevices = {
-            home = {
-              model = "DCP-L2560DW";
-              nodename = "mfp.home.arpa";
-            };
-          };
-        };
-      };
+    hardware.bluetooth = {
+      enable = true;
+      # WORKAROUND: fix bluetooth SAP (SIM Access Profile) related errors
+      disabledPlugins = [ "sap" ];
     };
 
     security.rtkit.enable = true;
 
     services = {
-      # Brother DCP-L2560DW printer CUPS setup:
-      # Protocol: IPP
-      # URI: ipp://mfp.home.arpa:631/ipp/print
-      # Make: Generic
-      # Model: IPP Everywhere
-      printing.enable = true;
-
       upower.enable = true;
 
       pipewire = {

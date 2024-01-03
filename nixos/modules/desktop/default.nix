@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ./brother-mfp.nix
     ./generic.nix
     ./swaylock.nix
     ./swaywm.nix
