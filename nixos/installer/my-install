@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Dependencies: zfs
 
 set -euo pipefail
 
@@ -13,6 +12,10 @@ sudo cp -a /etc/machine-id /mnt/persist/etc/
 # Copy user password files previously created into /tmp/persist
 sudo cp -ar /tmp/persist /mnt/
 
+my-preinstall-$host || echo "No host-specific pre-install hook found." >&2
+
 sudo nixos-install --flake "$flakedir#$host" --no-root-passwd
+
+my-postinstall-$host || echo "No host-specific post-install hook found." >&2
 
 sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/

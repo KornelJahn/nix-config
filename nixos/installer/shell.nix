@@ -7,6 +7,8 @@ pkgs.stdenvNoCC.mkDerivation {
     pkgs.coreutils
     pkgs.jq
     pkgs.mkpasswd
+    pkgs.wget
+    pkgs.unzip
     pkgs.util-linux
     pkgs.zfs
   ];
