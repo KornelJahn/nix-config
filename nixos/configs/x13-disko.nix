@@ -45,7 +45,7 @@
           "com.sun:auto-snapshot" = "false";
         };
         postCreateHook = ''
-          zfs set keylocation="prompt" rpool
+          zfs set keylocation=prompt rpool
         '';
         options = {
           ashift = "12";
