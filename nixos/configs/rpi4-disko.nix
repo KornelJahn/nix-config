@@ -52,6 +52,9 @@
           compression = "lz4";
           "com.sun:auto-snapshot" = "false";
         };
+        postCreateHook = ''
+          zfs set keylocation="prompt" rpool
+        '';
         options = {
           ashift = "12";
           autotrim = "on";
