@@ -12,10 +12,18 @@ sudo cp -a /etc/machine-id /mnt/persist/etc/
 # Copy user password files previously created into /tmp/persist
 sudo cp -ar /tmp/persist /mnt/
 
-my-preinstall-$host || echo "No host-specific pre-install hook found." >&2
+if command -v my-preinstall-$host &> /dev/null; then
+    my-preinstall-$host
+else
+    echo "No host-specific pre-install hook found." >&2
+fi
 
 sudo nixos-install --flake "$flakedir#$host" --no-root-passwd
 
-my-postinstall-$host || echo "No host-specific post-install hook found." >&2
+if command -v my-postinstall-$host &> /dev/null; then
+    my-postinstall-$host
+else
+    echo "No host-specific post-install hook found." >&2
+fi
 
 sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
