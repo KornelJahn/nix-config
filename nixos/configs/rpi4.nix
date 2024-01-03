@@ -19,10 +19,14 @@
   };
 
   boot = {
+    kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
     initrd.availableKernelModules = [
-      "xhci_pci"
-      "usbhid"
+      "pcie_brcmstb"
+      "reset-raspberrypi"
       "usb_storage"
+      "usbhid"
+      "vc4"
+      "xhci_pci"
     ];
     loader.systemd-boot.enable = true;
   };
@@ -35,6 +39,7 @@
 
   hardware = {
     opengl.enable = true;
+    deviceTree.filter = "bcm2711-rpi-*.dtb";
   };
 
   networking.hostName = "rpi4";
