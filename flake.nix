@@ -21,11 +21,10 @@
       inherit (self) outputs;
       specialArgs = { inherit inputs outputs; };
       extraSpecialArgs = specialArgs;
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [ "x86_64-linux" ];
       hosts = [
         "b550"
         "c236m"
-        "rpi4"
         "x13"
       ];
 
