@@ -1,8 +1,7 @@
+# ThinkPad X13 Gen 1 AMD
+
 { config, pkgs, lib, inputs, outputs, ... }:
 
-let
-  lanIface = "enp5s0";
-in
 {
   imports = [
     inputs.nixpkgs.nixosModules.notDetected
@@ -12,8 +11,14 @@ in
   ];
 
   my = {
-    desktop.enable = true;
-    gaming.devilutionx.enable = true;
+    desktop = {
+      enable = true;
+      brotherMfp.enable = true;
+    };
+    gaming = {
+      devilutionx.enable = true;
+      diablo2.enable = true;
+    };
     network = {
       shares.enable = true;
       tailscale.enable = true;
@@ -24,14 +29,14 @@ in
 
   boot = {
     initrd.availableKernelModules = [
-      "ahci"
       "nvme"
-      "sd_mod"
-      "usb_storage"
-      "usbhid"
+      "ehci_pci"
       "xhci_pci"
+      "usb_storage"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
     ];
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "kvm-amd" "amdgpu" ];
     loader.systemd-boot.enable = true;
   };
 
@@ -44,7 +49,7 @@ in
   swapDevices = [ ];
 
   hardware = {
-    cpu.intel.updateMicrocode = lib.mkDefault
+    cpu.amd.updateMicrocode = lib.mkDefault
       config.hardware.enableRedistributableFirmware;
     opengl = {
       enable = true;
@@ -53,30 +58,10 @@ in
     };
   };
 
-  networking = {
-    hostName = "c236m";
-    interfaces.enp5s0.wakeOnLan.enable = true;
-
-    # Bridge for VMs
-    bridges.br0.interfaces = [ lanIface ];
-    interfaces.br0.useDHCP = true;
-  };
+  networking.hostName = "griswold";
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
-
-  systemd.services.wakeonlan = {
-    description = "Re-enable Wake-On-LAN on every boot";
-    after = [ "network.target" ];
-    serviceConfig = {
-      Type = "simple";
-      RemainAfterExit = "true";
-      ExecStart = "${pkgs.ethtool}/sbin/ethtool -s ${lanIface} wol g";
-    };
-    wantedBy = [ "default.target" ];
-  };
-
   system.stateVersion = "23.05";
 
-} // (import ./c236m-disko.nix)
+} // (import ./griswold-disko.nix)

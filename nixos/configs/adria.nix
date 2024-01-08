@@ -1,5 +1,10 @@
+# Custom Xeon workstation (C236)
+
 { config, pkgs, lib, inputs, outputs, ... }:
 
+let
+  lanIface = "enp5s0";
+in
 {
   imports = [
     inputs.nixpkgs.nixosModules.notDetected
@@ -9,14 +14,8 @@
   ];
 
   my = {
-    desktop = {
-      enable = true;
-      brotherMfp.enable = true;
-    };
-    gaming = {
-      devilutionx.enable = true;
-      diablo2.enable = true;
-    };
+    desktop.enable = true;
+    gaming.devilutionx.enable = true;
     network = {
       shares.enable = true;
       tailscale.enable = true;
@@ -27,14 +26,14 @@
 
   boot = {
     initrd.availableKernelModules = [
+      "ahci"
       "nvme"
-      "ehci_pci"
-      "xhci_pci"
-      "usb_storage"
       "sd_mod"
-      "rtsx_pci_sdmmc"
+      "usb_storage"
+      "usbhid"
+      "xhci_pci"
     ];
-    kernelModules = [ "kvm-amd" "amdgpu" ];
+    kernelModules = [ "kvm-intel" ];
     loader.systemd-boot.enable = true;
   };
 
@@ -47,7 +46,7 @@
   swapDevices = [ ];
 
   hardware = {
-    cpu.amd.updateMicrocode = lib.mkDefault
+    cpu.intel.updateMicrocode = lib.mkDefault
       config.hardware.enableRedistributableFirmware;
     opengl = {
       enable = true;
@@ -56,10 +55,30 @@
     };
   };
 
-  networking.hostName = "x13";
+  networking = {
+    hostName = "adria";
+    interfaces.enp5s0.wakeOnLan.enable = true;
+
+    # Bridge for VMs
+    bridges.br0.interfaces = [ lanIface ];
+    interfaces.br0.useDHCP = true;
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+
+  systemd.services.wakeonlan = {
+    description = "Re-enable Wake-On-LAN on every boot";
+    after = [ "network.target" ];
+    serviceConfig = {
+      Type = "simple";
+      RemainAfterExit = "true";
+      ExecStart = "${pkgs.ethtool}/sbin/ethtool -s ${lanIface} wol g";
+    };
+    wantedBy = [ "default.target" ];
+  };
+
   system.stateVersion = "23.05";
 
-} // (import ./x13-disko.nix)
+} // (import ./adria-disko.nix)

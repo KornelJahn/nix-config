@@ -1,3 +1,5 @@
+# Custom Ryzen desktop PC (B550)
+
 { config, pkgs, lib, inputs, outputs, ... }:
 
 let
@@ -63,7 +65,7 @@ in
   };
 
   networking = {
-    hostName = "b550";
+    hostName = "cain";
 
     # Bridge for VMs
     bridges.br0.interfaces = [ lanIface ];
@@ -87,4 +89,4 @@ in
 
   system.stateVersion = "23.05";
 
-} // (import ./b550-disko.nix)
+} // (import ./cain-disko.nix)

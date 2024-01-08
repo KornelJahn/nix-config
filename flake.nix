@@ -23,9 +23,9 @@
       extraSpecialArgs = specialArgs;
       systems = [ "x86_64-linux" ];
       hosts = [
-        "b550"
-        "c236m"
-        "x13"
+        "adria"
+        "cain"
+        "griswold"
       ];
 
       forEachSystem = nixpkgs.lib.genAttrs systems;
